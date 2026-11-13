@@ -38,7 +38,7 @@ function Home() {
         <h2 className="headline mb-8 text-4xl md:text-6xl">Built for every day.</h2>
         <div className="flex snap-x gap-3 overflow-x-auto no-scrollbar md:grid md:grid-cols-3 md:overflow-visible">
           {collections.map((c) => (
-            <Link key={c.slug} to={`/${c.slug}` as "/men"} className="group relative w-[78%] shrink-0 snap-start overflow-hidden md:w-auto">
+            <Link key={c.slug} to={`/${c.slug}` as "/men" | "/women" | "/essentials"} className="group relative w-[78%] shrink-0 snap-start overflow-hidden md:w-auto">
               <img src={c.image} alt={c.name} loading="lazy" className="aspect-[3/4] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
               <div className="absolute bottom-6 left-6">
                 <span className="pill bg-background text-foreground">{c.name}</span>

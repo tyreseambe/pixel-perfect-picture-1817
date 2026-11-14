@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { z } from "zod";
+import { useServerFn } from "@tanstack/react-start";
+import { subscribeNewsletter } from "@/lib/store.functions";
+import { Button } from "./ui/button";
 const email = z.string().trim().email().max(255);
 export function Newsletter() {
+  const subscribe = useServerFn(subscribeNewsletter);
+  const [busy, setBusy] = useState(false);
   const [v, setV] = useState("");
   const [consent, setConsent] = useState(false);
   const [state, setState] = useState<"idle" | "error" | "done">("idle");
@@ -14,15 +19,18 @@ export function Newsletter() {
         {state === "done" ? (
           <p className="mt-8 font-medium" role="status">Thanks — you're on the list.</p>
         ) : (
-          <form noValidate className="mt-8 space-y-4 text-left" onSubmit={(e) => {
+          <form noValidate className="mt-8 space-y-4 text-left" onSubmit={async (e) => {
             e.preventDefault();
             if (!email.safeParse(v).success) { setErr("Please enter a valid email address."); setState("error"); return; }
             if (!consent) { setErr("Please confirm you'd like to receive emails."); setState("error"); return; }
-            setState("done");
+            setBusy(true);
+            try { await subscribe({ data: { email: v, consent: true } }); setState("done"); }
+            catch (error) { setErr(error instanceof Error ? error.message : "Please try again."); setState("error"); }
+            finally { setBusy(false); }
           }}>
             <div className="flex gap-2">
-              <input type="email" value={v} onChange={(e) => setV(e.target.value)} placeholder="Email address" aria-label="Email address" className="h-12 flex-1 rounded-full border border-input bg-background px-5 outline-none focus:border-foreground" />
-              <button className="pill bg-primary text-primary-foreground">Sign up</button>
+              <input type="email" value={v} onChange={(e) => setV(e.target.value)} placeholder="Email address" aria-label="Email address" className="h-12 min-w-0 flex-1 rounded-full border border-input bg-background px-5 outline-none focus:border-foreground" />
+              <Button disabled={busy} className="h-12 rounded-full">{busy ? "Saving…" : "Sign up"}</Button>
             </div>
             <label className="flex items-start gap-3 text-sm text-muted-foreground">
               <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-0.5 h-4 w-4 accent-current" />

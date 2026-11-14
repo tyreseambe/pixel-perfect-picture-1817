@@ -1,6 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { InfoPage, meta } from "@/components/InfoPage";
+import { createFileRoute } from "@tanstack/react-router";
+import { meta } from "@/components/InfoPage";
+import { AdminPanel } from "@/components/AdminPanel";
 export const Route = createFileRoute("/admin")({
-  head: () => meta("Admin", "The store dashboard is being set up."),
-  component: () => <InfoPage title="Admin" intro="The store dashboard is being set up."><Link to="/new" className="pill bg-primary text-primary-foreground">Continue shopping</Link></InfoPage>,
+  head: () => meta("Store Management", "VALE store administration."),
+  component: AdminPanel,
 });

@@ -24,20 +24,25 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
   useEffect(() => {
     try {
-      setLines(JSON.parse(localStorage.getItem("vale-bag") || "[]"));
-      setWish(JSON.parse(localStorage.getItem("vale-wish") || "[]"));
+      const savedLines: unknown = JSON.parse(localStorage.getItem("vale-bag") || "[]");
+      const savedWish: unknown = JSON.parse(localStorage.getItem("vale-wish") || "[]");
+      if (Array.isArray(savedLines)) setLines(savedLines.filter((line) => line && typeof line.slug === "string" && getProduct(line.slug) && Number.isInteger(line.qty) && line.qty > 0));
+      if (Array.isArray(savedWish)) setWish(savedWish.filter((slug) => typeof slug === "string" && getProduct(slug)));
     } catch {}
     setReady(true);
   }, []);
   useEffect(() => { if (ready) localStorage.setItem("vale-bag", JSON.stringify(lines)); }, [lines, ready]);
   useEffect(() => { if (ready) localStorage.setItem("vale-wish", JSON.stringify(wishlist)); }, [wishlist, ready]);
 
-  const add: Store["add"] = (l) =>
+  const add: Store["add"] = (l) => {
+    const product = getProduct(l.slug);
+    if (!product || !product.sizes.includes(l.size) || product.soldOut?.includes(l.size) || !product.colors.some((c) => c.name === l.color)) return;
     setLines((cur) => {
       const i = cur.findIndex((c) => c.slug === l.slug && c.color === l.color && c.size === l.size);
       if (i >= 0) return cur.map((c, j) => (j === i ? { ...c, qty: Math.min(10, c.qty + 1) } : c));
       return [...cur, { ...l, qty: 1 }];
     });
+  };
   const setQty = (i: number, qty: number) =>
     setLines((cur) => cur.map((c, j) => (j === i ? { ...c, qty: Math.max(1, Math.min(10, qty)) } : c)));
   const remove = (i: number) => setLines((cur) => cur.filter((_, j) => j !== i));

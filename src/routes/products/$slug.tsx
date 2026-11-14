@@ -15,9 +15,10 @@ export const Route = createFileRoute("/products/$slug")({
 });
 function PDP() {
   const { slug } = Route.useParams();
-  const p = getProduct(slug)!;
+  const p = getProduct(slug);
+  if (!p) throw notFound();
   const { add, wishlist, toggleWish } = useCart();
-  const [color, setColor] = useState(p.colors[0].name);
+  const [color, setColor] = useState(p.colors[0]?.name ?? "");
   const [size, setSize] = useState<string>();
   const [msg, setMsg] = useState("");
   const related = products.filter((x) => x.slug !== p.slug && x.category === p.category).concat(products.filter((x) => x.slug !== p.slug)).slice(0, 4);

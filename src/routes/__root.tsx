@@ -11,6 +11,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import { CartProvider } from "@/lib/cart";
+import { AuthProvider } from "@/lib/auth";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import appCss from "../styles.css?url";
@@ -128,11 +129,11 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <CartProvider>
+      <AuthProvider><CartProvider>
         <Header />
         <main className="min-h-[60vh]"><Outlet /></main>
         <Footer />
-      </CartProvider>
+      </CartProvider></AuthProvider>
     </QueryClientProvider>
   );
 }

@@ -1,0 +1,5 @@
+import { z } from 'zod';
+export const newsletterSchema = z.object({ email: z.string().trim().email().max(255).transform(v => v.toLowerCase()), consent: z.literal(true) });
+export const contactSchema = z.object({ name: z.string().trim().min(1).max(100), email: z.string().trim().email().max(255), subject: z.string().trim().min(1).max(150), message: z.string().trim().min(10).max(5000) });
+export const addressSchema = z.object({ name: z.string().trim().min(1).max(100), line1: z.string().trim().min(1).max(200), line2: z.string().trim().max(200), city: z.string().trim().min(1).max(100), postal_code: z.string().trim().min(1).max(20), country: z.string().trim().length(2).transform(v => v.toUpperCase()) });
+export const integrationSchema = z.object({ key: z.enum(['printful', 'discord']), value: z.object({ storeId: z.string().trim().max(40).regex(/^\d*$/), guildId: z.string().trim().max(30).regex(/^\d*$/), channelId: z.string().trim().max(30).regex(/^\d*$/), announcements: z.boolean(), orderAlerts: z.boolean(), enabled: z.literal(false) }) });

@@ -29,6 +29,7 @@ import { Route as MenRouteImport } from './routes/men'
 import { Route as NewRouteImport } from './routes/new'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ReturnsRouteImport } from './routes/returns'
 import { Route as SaleRouteImport } from './routes/sale'
 import { Route as SearchRouteImport } from './routes/search'
@@ -36,6 +37,7 @@ import { Route as ShippingRouteImport } from './routes/shipping'
 import { Route as SizeGuideRouteImport } from './routes/size-guide'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as WomenRouteImport } from './routes/women'
+import { Route as AccountIndexRouteImport } from './routes/account/index'
 import { Route as AccountWishlistRouteImport } from './routes/account/wishlist'
 import { Route as ProductsSlugRouteImport } from './routes/products/$slug'
 
@@ -139,6 +141,11 @@ const RegisterRoute = RegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReturnsRoute = ReturnsRouteImport.update({
   id: '/returns',
   path: '/returns',
@@ -174,6 +181,11 @@ const WomenRoute = WomenRouteImport.update({
   path: '/women',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccountIndexRoute = AccountIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AccountRoute,
+} as any)
 const AccountWishlistRoute = AccountWishlistRouteImport.update({
   id: '/wishlist',
   path: '/wishlist',
@@ -206,6 +218,7 @@ export interface FileRoutesByFullPath {
   '/new': typeof NewRoute
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/returns': typeof ReturnsRoute
   '/sale': typeof SaleRoute
   '/search': typeof SearchRoute
@@ -215,11 +228,11 @@ export interface FileRoutesByFullPath {
   '/women': typeof WomenRoute
   '/account/wishlist': typeof AccountWishlistRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/account/': typeof AccountIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/account': typeof AccountRouteWithChildren
   '/admin': typeof AdminRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
@@ -237,6 +250,7 @@ export interface FileRoutesByTo {
   '/new': typeof NewRoute
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/returns': typeof ReturnsRoute
   '/sale': typeof SaleRoute
   '/search': typeof SearchRoute
@@ -246,6 +260,7 @@ export interface FileRoutesByTo {
   '/women': typeof WomenRoute
   '/account/wishlist': typeof AccountWishlistRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/account': typeof AccountIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -269,6 +284,7 @@ export interface FileRoutesById {
   '/new': typeof NewRoute
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/returns': typeof ReturnsRoute
   '/sale': typeof SaleRoute
   '/search': typeof SearchRoute
@@ -278,6 +294,7 @@ export interface FileRoutesById {
   '/women': typeof WomenRoute
   '/account/wishlist': typeof AccountWishlistRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/account/': typeof AccountIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -302,6 +319,7 @@ export interface FileRouteTypes {
     | '/new'
     | '/privacy'
     | '/register'
+    | '/reset-password'
     | '/returns'
     | '/sale'
     | '/search'
@@ -311,11 +329,11 @@ export interface FileRouteTypes {
     | '/women'
     | '/account/wishlist'
     | '/products/$slug'
+    | '/account/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
-    | '/account'
     | '/admin'
     | '/cart'
     | '/checkout'
@@ -333,6 +351,7 @@ export interface FileRouteTypes {
     | '/new'
     | '/privacy'
     | '/register'
+    | '/reset-password'
     | '/returns'
     | '/sale'
     | '/search'
@@ -342,6 +361,7 @@ export interface FileRouteTypes {
     | '/women'
     | '/account/wishlist'
     | '/products/$slug'
+    | '/account'
   id:
     | '__root__'
     | '/'
@@ -364,6 +384,7 @@ export interface FileRouteTypes {
     | '/new'
     | '/privacy'
     | '/register'
+    | '/reset-password'
     | '/returns'
     | '/sale'
     | '/search'
@@ -373,6 +394,7 @@ export interface FileRouteTypes {
     | '/women'
     | '/account/wishlist'
     | '/products/$slug'
+    | '/account/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -396,6 +418,7 @@ export interface RootRouteChildren {
   NewRoute: typeof NewRoute
   PrivacyRoute: typeof PrivacyRoute
   RegisterRoute: typeof RegisterRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   ReturnsRoute: typeof ReturnsRoute
   SaleRoute: typeof SaleRoute
   SearchRoute: typeof SearchRoute
@@ -548,6 +571,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/returns': {
       id: '/returns'
       path: '/returns'
@@ -597,6 +627,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WomenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/account/': {
+      id: '/account/'
+      path: '/'
+      fullPath: '/account/'
+      preLoaderRoute: typeof AccountIndexRouteImport
+      parentRoute: typeof AccountRoute
+    }
     '/account/wishlist': {
       id: '/account/wishlist'
       path: '/wishlist'
@@ -616,10 +653,12 @@ declare module '@tanstack/react-router' {
 
 interface AccountRouteChildren {
   AccountWishlistRoute: typeof AccountWishlistRoute
+  AccountIndexRoute: typeof AccountIndexRoute
 }
 
 const AccountRouteChildren: AccountRouteChildren = {
   AccountWishlistRoute: AccountWishlistRoute,
+  AccountIndexRoute: AccountIndexRoute,
 }
 
 const AccountRouteWithChildren =
@@ -646,6 +685,7 @@ const rootRouteChildren: RootRouteChildren = {
   NewRoute: NewRoute,
   PrivacyRoute: PrivacyRoute,
   RegisterRoute: RegisterRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   ReturnsRoute: ReturnsRoute,
   SaleRoute: SaleRoute,
   SearchRoute: SearchRoute,

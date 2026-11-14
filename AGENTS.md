@@ -28,3 +28,9 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Store architecture
+- Keep Printful and Discord in preparation-only mode until explicitly activated; no credential prompts, provider calls or imports run during preparation.
+- Store account data and integration preferences in Cloud with owner-scoped or admin-scoped policies; never infer admin privileges from browser state.
+- Publish products only after an explicit review of real provider records; an empty catalog must never fall back to sample merchandise.
+- Use shared auth state and server functions for customer actions; public forms accept validated inputs and cannot read private submissions.

@@ -60,7 +60,7 @@ export function CollectionPage({ title, items }: { title: string; items: Product
     <div className="mx-auto max-w-[1800px] px-5 md:px-10">
       <div className="sticky top-16 z-20 flex items-center justify-between bg-background py-5">
         <h1 className="text-2xl font-medium">{title} <span className="text-muted-foreground">({list.length})</span></h1>
-        <div className="flex items-center gap-4">
+        {items.length > 0 && <div className="flex items-center gap-4">
           <button onClick={() => setDrawer(true)} className="flex items-center gap-2 font-medium lg:hidden">Filter <SlidersHorizontal className="h-5 w-5" strokeWidth={1.5} /></button>
           <label className="flex items-center gap-2 font-medium">
             <span className="hidden sm:inline">Sort by</span>
@@ -69,12 +69,12 @@ export function CollectionPage({ title, items }: { title: string; items: Product
               <option value="price-asc">Price: Low–High</option><option value="price-desc">Price: High–Low</option>
             </select>
           </label>
-        </div>
+        </div>}
       </div>
       <div className="flex gap-10">
-        <aside className="hidden w-56 shrink-0 lg:block">{filters}</aside>
+        {items.length > 0 && <aside className="hidden w-56 shrink-0 lg:block">{filters}</aside>}
         <div className="flex-1">
-          {list.length === 0 ? <p className="py-20 text-center text-muted-foreground">No products match these filters.</p> : (
+          {list.length === 0 ? <div className="py-20 text-center"><h2 className="text-xl font-medium">{items.length ? "No products match these filters." : "The next collection is on its way."}</h2><p className="mt-3 text-muted-foreground">{items.length ? "Try changing your filters." : "No pieces are available yet."}</p></div> : (
             <div className="grid grid-cols-2 gap-x-2 gap-y-6 md:grid-cols-3 md:gap-x-4">
               {list.slice(0, shown).map((p) => <ProductCard key={p.slug} p={p} />)}
             </div>

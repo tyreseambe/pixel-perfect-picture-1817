@@ -1,6 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { InfoPage, meta } from "@/components/InfoPage";
+import { createFileRoute } from "@tanstack/react-router";
+import { meta } from "@/components/InfoPage";
+import { AuthForm } from "@/components/AuthForm";
 export const Route = createFileRoute("/register")({
-  head: () => meta("Join Us", "Registration is being set up."),
-  component: () => <InfoPage title="Join Us" intro="Registration is being set up."><Link to="/new" className="pill bg-primary text-primary-foreground">Continue shopping</Link></InfoPage>,
+  head: () => meta("Join Us", "Create your VALE customer account."),
+  component: () => <AuthForm mode="register" />,
 });

@@ -33,16 +33,8 @@ const CHAR = { name: "Charcoal", swatch: "oklch(0.4 0 0)" };
 const GREY = { name: "Heather Grey", swatch: "oklch(0.75 0 0)" };
 const S = ["XS", "S", "M", "L", "XL"];
 
-export const products: Product[] = [
-  { slug: "heavyweight-hoodie", name: "Heavyweight Hoodie", category: "Hoodies", gender: "unisex", collections: ["essentials", "new"], price: 89, colors: [BLACK, CHAR], sizes: S, images: [hoodie, hero], label: "New", popularity: 98, added: 20, description: "A dense brushed-back fleece hoodie with a relaxed, dropped-shoulder fit and a structured double-layer hood.", material: "Cotton fleece. Machine wash cold, inside out. Do not tumble dry." },
-  { slug: "boxy-tee", name: "Boxy Tee", category: "T-Shirts", gender: "unisex", collections: ["essentials", "new"], price: 39, colors: [BONE, BLACK, GREY], sizes: S, images: [tee], label: "New", popularity: 95, added: 19, description: "A heavyweight jersey tee cut wide through the body with a tight ribbed neckline.", material: "Cotton jersey. Machine wash cold. Dry flat." },
-  { slug: "wide-leg-sweatpant", name: "Wide-Leg Sweatpant", category: "Pants", gender: "unisex", collections: ["essentials"], price: 79, colors: [CHAR, BLACK], sizes: S, soldOut: ["XS"], images: [pants], popularity: 90, added: 15, description: "A relaxed fleece sweatpant with a straight wide leg and an elasticated waistband.", material: "Cotton fleece. Machine wash cold, inside out." },
-  { slug: "padded-bomber", name: "Padded Bomber", category: "Jackets", gender: "men", collections: ["new"], price: 189, colors: [BLACK], sizes: ["S", "M", "L", "XL"], images: [jacket, men], label: "Limited", popularity: 88, added: 18, description: "A lightly padded bomber with ribbed trims, a two-way zip and clean welt pockets.", material: "Shell: polyamide. Machine wash cold, gentle cycle." },
-  { slug: "core-bomber-set", name: "Core Bomber Look", category: "Jackets", gender: "men", collections: [], price: 169, salePrice: 129, colors: [BLACK], sizes: ["S", "M", "L", "XL"], images: [men, jacket], popularity: 70, added: 8, description: "The unlined version of our bomber, cut slightly closer for everyday layering.", material: "Cotton blend. Machine wash cold." },
-  { slug: "oversized-knit", name: "Oversized Knit", category: "Knitwear", gender: "women", collections: ["new"], price: 129, colors: [BONE], sizes: S, images: [women], label: "New", popularity: 92, added: 17, description: "A chunky crew-neck knit with dropped shoulders and deep ribbed cuffs.", material: "Wool blend. Hand wash cold. Dry flat." },
-  { slug: "pleated-trouser", name: "Pleated Wide Trouser", category: "Pants", gender: "women", collections: [], price: 119, salePrice: 89, colors: [BLACK], sizes: S, images: [women], popularity: 75, added: 10, description: "A high-rise trouser with front pleats and a long, fluid wide leg.", material: "Polyester blend. Machine wash cold, gentle cycle." },
-  { slug: "long-coat", name: "Long Overcoat", category: "Coats", gender: "unisex", collections: ["new"], price: 249, colors: [BONE, BLACK], sizes: ["S", "M", "L"], images: [campaign], label: "Limited", popularity: 84, added: 16, description: "An unstructured longline coat with a relaxed shoulder and patch pockets.", material: "Wool blend. Dry clean only." },
-];
+// The storefront stays empty until real products are imported and approved.
+export const products: Product[] = [];
 
 export const collections = [
   { slug: "essentials", name: "Everyday Essentials", image: hoodie },

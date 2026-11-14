@@ -1,0 +1,26 @@
+import { useState } from 'react';
+import { Link } from '@tanstack/react-router';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useServerFn } from '@tanstack/react-start';
+import { useAuth } from '@/lib/auth';
+import { supabase } from '@/integrations/supabase/client';
+import { getAccount, saveAccount, saveAddress, deleteAddress } from '@/lib/store.functions';
+import { Button } from './ui/button';
+import { InfoPage } from './InfoPage';
+export function AccountPanel() {
+  const { user, ready } = useAuth(); const client = useQueryClient();
+  const load = useServerFn(getAccount); const save = useServerFn(saveAccount); const add = useServerFn(saveAddress); const remove = useServerFn(deleteAddress);
+  const account = useQuery({ queryKey: ['account', user?.id], queryFn: () => load(), enabled: !!user });
+  const [tab, setTab] = useState('Profile'); const [status, setStatus] = useState(''); const [busy, setBusy] = useState(false);
+  const refresh = () => client.invalidateQueries({ queryKey: ['account'] });
+  const action = async (fn: () => Promise<unknown>) => { setBusy(true); setStatus(''); try { await fn(); await refresh(); setStatus('Saved.'); } catch (e) { setStatus(e instanceof Error ? e.message : 'Could not save.'); } finally { setBusy(false); } };
+  if (!ready) return <InfoPage title="Account"><p>Loading…</p></InfoPage>;
+  if (!user) return <InfoPage title="Account" intro="Sign in to see your account."><Button asChild><Link to="/login">Sign In</Link></Button> <Button asChild variant="outline"><Link to="/register">Join VALE</Link></Button></InfoPage>;
+  return <InfoPage title="My account" intro={user.email}><div className="flex flex-wrap gap-2">{['Profile', 'Addresses', 'Orders'].map(t => <Button key={t} variant={tab === t ? 'default' : 'outline'} onClick={() => {setTab(t); setStatus('');}}>{t}</Button>)}<Button asChild variant="outline"><Link to="/account/wishlist">Wishlist</Link></Button>{account.data?.admin && <Button asChild variant="outline"><Link to="/admin">Store management</Link></Button>}<Button variant="ghost" onClick={async () => { const { error } = await supabase.auth.signOut(); if(error) setStatus(error.message); }}>Sign out</Button></div>
+    {account.isPending && <p>Loading your account…</p>}{account.error && <p role="alert">{account.error.message}</p>}
+    {account.data && tab === 'Profile' && <form key={account.data.settings?.display_name} className="max-w-md space-y-4" onSubmit={e => { e.preventDefault(); const f = new FormData(e.currentTarget); void action(() => save({ data: { display_name: String(f.get('name') ?? ''), newsletter: f.get('newsletter') === 'on' } })); }}><label className="block">Display name<input name="name" aria-label="Display name" maxLength={100} defaultValue={account.data.settings?.display_name ?? ''} className="mt-2 h-12 w-full border border-input px-4" /></label><label className="flex items-center gap-3"><input type="checkbox" name="newsletter" defaultChecked={account.data.settings?.newsletter} />Receive collection updates</label><Button disabled={busy}>Save preferences</Button><p><Link to="/forgot-password">Change password</Link></p></form>}
+    {account.data && tab === 'Addresses' && <><div className="divide-y divide-border">{account.data.addresses.map(a => <div key={a.id} className="flex justify-between gap-4 py-4"><div><p className="font-medium">{a.name}</p><p>{a.line1} {a.line2}</p><p>{a.postal_code} {a.city}, {a.country}</p></div><Button variant="ghost" disabled={busy} onClick={() => action(() => remove({ data: { id: a.id } }))}>Remove</Button></div>)}</div><h2>Add address</h2><form className="grid gap-4 sm:grid-cols-2" onSubmit={e => { e.preventDefault(); const form = e.currentTarget; const f = new FormData(form); void action(async () => { await add({ data: { name: String(f.get('name')), line1: String(f.get('line1')), line2: String(f.get('line2') ?? ''), city: String(f.get('city')), postal_code: String(f.get('postal_code')), country: String(f.get('country')) } }); form.reset(); }); }}>{[['name','Full name'],['line1','Street address'],['line2','Apartment (optional)'],['city','City'],['postal_code','Postal code']].map(([name,label]) => <label key={name}>{label}<input name={name} aria-label={label} required={name !== 'line2'} maxLength={name === 'postal_code' ? 20 : 100} className="mt-2 h-12 w-full border border-input px-4" /></label>)}<label>Country<select name="country" aria-label="Country" className="mt-2 h-12 w-full border border-input bg-background px-4">{[['DE','Germany'],['AT','Austria'],['CH','Switzerland'],['FR','France'],['NL','Netherlands'],['GB','United Kingdom'],['US','United States']].map(([code,label]) => <option key={code} value={code}>{label}</option>)}</select></label><Button disabled={busy} className="sm:col-span-2">Save address</Button></form></>}
+    {account.data && tab === 'Orders' && (account.data.orders.length ? account.data.orders.map(o => <details key={o.id} className="border-b border-border py-4"><summary>Order {o.id.slice(0,8)} · {new Date(o.created_at).toLocaleDateString()} · {o.total} {o.currency}</summary><p>Payment: {o.payment_status}</p><p>Fulfillment: {o.fulfillment_status}</p></details>) : <p>No orders yet.</p>)}
+    {status && <p role="status">{status}</p>}
+  </InfoPage>;
+}
